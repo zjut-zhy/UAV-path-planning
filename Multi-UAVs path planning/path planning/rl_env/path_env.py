@@ -32,9 +32,9 @@ class RlGame(gym.Env):
 
             pygame.display.set_caption("基于深度强化学习的空战场景无人机路径规划软件")
 
-            self.GRAPHICS = tools.load_graphics('G:\path planning/assignment\source\image')
+            self.GRAPHICS = tools.load_graphics(r'D:\Users\ZHY\Documents\GitHub\UAV-path-planning\Multi-UAVs path planning\path planning/assignment\source\image')
 
-            self.SOUND = tools.load_sound('G:\path planning/assignment\source\music')
+            self.SOUND = tools.load_sound(r'D:\Users\ZHY\Documents\GitHub\UAV-path-planning\Multi-UAVs path planning\path planning/assignment\source\music')
             self.clock = pygame.time.Clock()
             self.mouse_pos=(100,100)
             pygame.time.set_timer(C.CREATE_ENEMY_EVENT, C.ENEMY_MAKE_TIME)

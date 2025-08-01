@@ -7,7 +7,7 @@ from matplotlib import pyplot as plt
 import os
 import pickle as pkl
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'TRUE'
-shoplistfile_test = 'E:\path planning\sample_indextest'  #保存文件数据所在文件的文件名'
+shoplistfile_test = 'Multi-UAVs path planning/path planning/sample_indextest'  #保存文件数据所在文件的文件名'
 N_Agent=1
 M_Enemy=5
 L_Obstacle=3

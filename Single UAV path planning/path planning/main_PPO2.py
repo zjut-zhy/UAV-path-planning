@@ -13,7 +13,7 @@ os.environ['KMP_DUPLICATE_LIB_OK'] = 'TRUE'
 N_Agent=1
 M_Enemy=1
 L_Obstacle=1
-RENDER=False
+RENDER=True
 env = RlGame(n=N_Agent,m=M_Enemy,l=L_Obstacle,render=RENDER).unwrapped
 '''Pendulum环境状态特征是三个，杆子的sin(角度)、cos（角度）、角速度，（状态是无限多个，因为连续），动作值是力矩，限定在[-2,2]之间的任意的小数，所以是连续的（动作也是无限个）'''
 state_number=7
@@ -34,7 +34,7 @@ METHOD = [
     dict(name='kl_pen', kl_target=0.01, lam=0.5),   # KL penalty
     dict(name='clip', epsilon=0.2),                 # Clipped surrogate objective, find this is better
 ][1]        # choose the method for optimization
-Switch=0
+Switch=1
 '''由于PPO也是基于A-C框架，所以我把PPO的编写分为两部分，PPO的第一部分 Actor'''
 '''PPO的第一步  编写A-C框架的网络，先编写actor部分的actor网络，actor的网络有新与老两个网络'''
 class ActorNet(nn.Module):
@@ -209,7 +209,7 @@ if Switch==0:
         #保存神经网络参数
         if episode % 50 == 0 and episode > 100:#保存神经网络参数
             save_data = {'net': actor.old_pi.state_dict(), 'opt': actor.optimizer.state_dict(), 'i': episode}
-            torch.save(save_data, "E:\path planning\Path_PPO2_actor.pth")
+            torch.save(save_data, "Single UAV path planning/path planning/Path_PPO2_actor.pth")
     plt.plot(np.arange(len(all_ep_r)), all_ep_r)
     plt.xlabel('Episode')
     plt.ylabel('Moving averaged episode reward')
@@ -218,7 +218,7 @@ if Switch==0:
 else:
     print('PPO2测试中...')
     aa=Actor()
-    checkpoint_aa = torch.load("E:\path planning\Path_PPO2_actor.pth")
+    checkpoint_aa = torch.load("Single UAV path planning/path planning/Path_PPO2_actor.pth")
     aa.old_pi.load_state_dict(checkpoint_aa['net'])
     for j in range(10):
         obs = env.reset()

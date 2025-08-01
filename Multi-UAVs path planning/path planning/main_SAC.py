@@ -11,9 +11,9 @@ import numpy as np
 from matplotlib import pyplot as plt
 import os
 import pickle as pkl
-shoplistfile = 'G:\path planning\MASAC_new1'  #保存文件数据所在文件的文件名
-shoplistfile_test = 'G:\path planning\MASAC_d_test2'  #保存文件数据所在文件的文件名
-shoplistfile_test1 = 'G:\path planning\MASAC_compare'  #保存文件数据所在文件的文件名
+shoplistfile = 'Multi-UAVs path planning/path planning/MASAC_new1'  #保存文件数据所在文件的文件名
+shoplistfile_test = 'Multi-UAVs path planning/path planning/MASAC_d_test2'  #保存文件数据所在文件的文件名
+shoplistfile_test1 = 'Multi-UAVs path planning/path planning/MASAC_compare'  #保存文件数据所在文件的文件名
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'TRUE'
 N_Agent=1
 M_Enemy=4
@@ -430,9 +430,9 @@ def run(env):
                     all_ep_r1[k].append(reward_totle1)
                     if episode % 20 == 0 and episode > 200:#保存神经网络参数
                         save_data = {'net': actors[0].action_net.state_dict(), 'opt': actors[0].optimizer.state_dict()}
-                        torch.save(save_data, "G:\path planning\Path_SAC_actor_L1.pth")
+                        torch.save(save_data, "Multi-UAVs path planning/path planning/Path_SAC_actor_L1.pth")
                         save_data = {'net': actors[1].action_net.state_dict(), 'opt': actors[1].optimizer.state_dict()}
-                        torch.save(save_data, "G:\path planning\Path_SAC_actor_F1.pth")
+                        torch.save(save_data, "Multi-UAVs path planning/path planning/Path_SAC_actor_F1.pth")
                 # plt.plot(np.arange(len(all_ep_r)), all_ep_r)
                 # plt.xlabel('Episode')
                 # plt.ylabel('Total reward')
@@ -489,10 +489,10 @@ def run(env):
     else:
         print('SAC测试中...')
         aa = Actor()
-        checkpoint_aa = torch.load("G:\path planning\Path_SAC_actor_L1.pth")
+        checkpoint_aa = torch.load("Multi-UAVs path planning/path planning/Path_SAC_actor_L1.pth")
         aa.action_net.load_state_dict(checkpoint_aa['net'])
         bb = Actor()
-        checkpoint_bb = torch.load("G:\path planning\Path_SAC_actor_F1.pth")
+        checkpoint_bb = torch.load("Multi-UAVs path planning/path planning/Path_SAC_actor_F1.pth")
         bb.action_net.load_state_dict(checkpoint_bb['net'])
         action = np.zeros((N_Agent+M_Enemy, action_number))
         win_times = 0

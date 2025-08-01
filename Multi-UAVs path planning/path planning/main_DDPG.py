@@ -11,8 +11,8 @@ import numpy as np
 from matplotlib import pyplot as plt
 import os
 import pickle as pkl
-shoplistfile = 'G:\path planning\MADDPG'  #保存文件数据所在文件的文件名
-shoplistfile_test = 'G:\path planning\MADDPG_compare'  #保存文件数据所在文件的文件名
+shoplistfile = 'Multi-UAVs path planning/path planning/MADDPG'  #保存文件数据所在文件的文件名
+shoplistfile_test = 'Multi-UAVs path planning/path planning/MADDPG_compare'  #保存文件数据所在文件的文件名
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'TRUE'
 N_Agent=1
 M_Enemy=4
@@ -265,9 +265,9 @@ def run(env):
                 all_ep_r1[k].append(reward_totle1)
                 if episode % 50 == 0 and episode > 200:#保存神经网络参数
                     save_data = {'net': actors[0].actor_estimate_eval.state_dict(), 'opt': actors[0].optimizer.state_dict()}
-                    torch.save(save_data, "G:\path planning\Path_DDPG_actor_new.pth")
+                    torch.save(save_data, "Multi-UAVs path planning/path planning/Path_DDPG_actor_new.pth")
                     save_data = {'net': actors[1].actor_estimate_eval.state_dict(), 'opt': actors[1].optimizer.state_dict()}
-                    torch.save(save_data, "G:\path planning\Path_DDPG_actor_1_new.pth")
+                    torch.save(save_data, "Multi-UAVs path planning/path planning/Path_DDPG_actor_1_new.pth")
             # plt.plot(np.arange(len(all_ep_r)), all_ep_r)
             # plt.xlabel('Episode')
             # plt.ylabel('Moving averaged episode reward')
@@ -316,10 +316,10 @@ def run(env):
     else:
         print('MADDPG测试中...')
         aa = Actor()
-        checkpoint_aa = torch.load("G:\path planning\Path_DDPG_actor_new.pth")
+        checkpoint_aa = torch.load("Multi-UAVs path planning/path planning/Path_DDPG_actor_new.pth")
         aa.actor_estimate_eval.load_state_dict(checkpoint_aa['net'])
         bb = Actor()
-        checkpoint_bb = torch.load("G:\path planning\Path_DDPG_actor_1_new.pth")
+        checkpoint_bb = torch.load("Multi-UAVs path planning/path planning/Path_DDPG_actor_1_new.pth")
         bb.actor_estimate_eval.load_state_dict(checkpoint_bb['net'])
         action = np.zeros((N_Agent + M_Enemy, action_number))
         win_times = 0

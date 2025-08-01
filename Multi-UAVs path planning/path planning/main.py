@@ -11,7 +11,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 import os
 import pickle as pkl
-shoplistfile_test = 'G:\path planning\sample_compare'  #保存文件数据所在文件的文件名
+shoplistfile_test = 'path planning/sample_compare'  #保存文件数据所在文件的文件名
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'TRUE'
 N_Agent=1
 M_Enemy=4

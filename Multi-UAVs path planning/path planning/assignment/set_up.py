@@ -10,6 +10,6 @@ SCREEN=pygame.display.set_mode((C.SCREEN_W, C.SCREEN_H))
 
 pygame.display.set_caption("eee")
 
-GRAPHICS=tools.load_graphics('G:\path planning/assignment\source\image')
+GRAPHICS=tools.load_graphics('path planning/assignment/source/image')
 
-SOUND=tools.load_sound('G:\path planning/assignment\source\music')
+SOUND=tools.load_sound('path planning/assignment/source/music')

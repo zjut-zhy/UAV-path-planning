@@ -9,16 +9,16 @@ import torch.nn as nn
 import torch.nn.functional as F
 import numpy as np
 from matplotlib import pyplot as plt
-device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+# device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 import os
 # import random
 import pickle as pkl
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'TRUE'
-shoplistfile = 'E:\path planning\SAC'  #保存文件数据所在文件的文件名
-shoplistfile_test = 'E:\path planning\SAC_indextest'  #保存文件数据所在文件的文件名'
+shoplistfile = 'Single UAV path planning/path planning/SAC'  #保存文件数据所在文件的文件名
+shoplistfile_test = 'Single UAV path planning/path planning/SAC_indextest'  #保存文件数据所在文件的文件名'
 N_Agent=1
-M_Enemy=1
-L_Obstacle=1
+M_Enemy=10
+L_Obstacle=10
 RENDER=True
 env = RlGame(n=N_Agent,m=M_Enemy,l=L_Obstacle,render=RENDER).unwrapped
 state_number=7
@@ -136,11 +136,11 @@ class Memory():
         return new_mem
 class Actor():
     def __init__(self):
-        self.action_net=ActorNet(state_number,action_number).cuda()#这只是均值mean
+        self.action_net=ActorNet(state_number,action_number)#这只是均值mean
         self.optimizer=torch.optim.Adam(self.action_net.parameters(),lr=policy_lr)
 
     def choose_action(self,s):
-        inputstate = torch.FloatTensor(s).cuda()
+        inputstate = torch.FloatTensor(s)
         mean,std=self.action_net(inputstate)
         dist = torch.distributions.Normal(mean, std)
         action=dist.sample()
@@ -178,7 +178,7 @@ class Entroy():
 
 class Critic():
     def __init__(self):
-        self.critic_v,self.target_critic_v=CriticNet(state_number,action_number).cuda(),CriticNet(state_number,action_number).cuda()#改网络输入状态，生成一个Q值
+        self.critic_v,self.target_critic_v=CriticNet(state_number,action_number),CriticNet(state_number,action_number)#改网络输入状态，生成一个Q值
         self.target_critic_v.load_state_dict(self.critic_v.state_dict())
         self.optimizer = torch.optim.Adam(self.critic_v.parameters(), lr=value_lr,eps=1e-5)
         self.lossfunc = nn.MSELoss()
@@ -234,23 +234,23 @@ def run(env):
                         b_a = b_M[:, state_number: state_number + action_number]
                         b_r = b_M[:, -state_number - 1: -state_number]
                         b_s_ = b_M[:, -state_number:]
-                        b_s = torch.FloatTensor(b_s).cuda()
-                        b_a = torch.FloatTensor(b_a).cuda()
-                        b_r = torch.FloatTensor(b_r).cuda()
-                        b_s_ = torch.FloatTensor(b_s_).cuda()
+                        b_s = torch.FloatTensor(b_s)
+                        b_a = torch.FloatTensor(b_a)
+                        b_r = torch.FloatTensor(b_r)
+                        b_s_ = torch.FloatTensor(b_s_)
                         new_action, log_prob_ = actor.evaluate(b_s_)
                         target_q1,target_q2=critic.target_critic_v(b_s_,new_action)
-                        target_q=b_r+GAMMA*(torch.min(target_q1,target_q2)-entroy.alpha.cuda()*log_prob_)
+                        target_q=b_r+GAMMA*(torch.min(target_q1,target_q2)-entroy.alpha*log_prob_)
                         current_q1, current_q2 = critic.get_v(b_s, b_a)
                         critic.learn(current_q1,current_q2,target_q.detach())
                         a,log_prob=actor.evaluate(b_s)
                         q1,q2=critic.get_v(b_s,a)
                         q=torch.min(q1,q2)
-                        actor_loss = (entroy.alpha.cuda() * log_prob - q).mean()
+                        actor_loss = (entroy.alpha * log_prob - q).mean()
                         actor.learn(actor_loss)
-                        alpha_loss = -(entroy.log_alpha.exp().cuda() * (log_prob + entroy.target_entropy).detach()).mean()
+                        alpha_loss = -(entroy.log_alpha.exp() * (log_prob + entroy.target_entropy).detach()).mean()
                         entroy.learn(alpha_loss)
-                        entroy.alpha=entroy.log_alpha.exp().cuda()
+                        entroy.alpha=entroy.log_alpha.exp()
                         # 软更新
                         critic.soft_update()
                     observation = observation_
@@ -270,7 +270,7 @@ def run(env):
                 all_ep_r_goal[k].append(reward_totle_goal)
                 if episode % 20 == 0 and episode > 200:#保存神经网络参数
                     save_data = {'net': actor.action_net.state_dict(), 'opt': actor.optimizer.state_dict(), 'i': episode}
-                    torch.save(save_data, "E:\path planning\Path_SAC_actor.pth")
+                    torch.save(save_data, "Single UAV path planning/path planning/Path_SAC_actor.pth")
             # plt.plot(np.arange(len(all_ep_r)), all_ep_r)
             # plt.xlabel('Episode')
             # plt.ylabel('Moving averaged episode reward')
@@ -332,7 +332,7 @@ def run(env):
     else:
         print('SAC测试中...')
         aa = Actor()
-        checkpoint_aa = torch.load("E:\path planning\Path_SAC_actor.pth")
+        checkpoint_aa = torch.load("Single UAV path planning/path planning/Path_SAC_actor.pth", map_location=torch.device('cpu'))
         aa.action_net.load_state_dict(checkpoint_aa['net'])
         win_times = 0
         average_timestep=0

@@ -13,12 +13,12 @@ import os
 import gym
 import pickle as pkl
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'TRUE'
-shoplistfile = 'E:\path planning\DDPG1'  #保存文件数据所在文件的文件名
-shoplistfile_test = 'E:\path planning\DDPG_indextest'  #保存文件数据所在文件的文件名'
+shoplistfile = 'Single UAV path planning/path planning/DDPG1'  #保存文件数据所在文件的文件名
+shoplistfile_test = 'Single UAV path planning/path planning/DDPG_indextest'  #保存文件数据所在文件的文件名'
 N_Agent=1
-M_Enemy=1
-L_Obstacle=1
-RENDER=False
+M_Enemy=10
+L_Obstacle=10
+RENDER=True
 env = RlGame(n=N_Agent,m=M_Enemy,l=L_Obstacle,render=RENDER).unwrapped
 EPIOSDE_ALL=500
 TEST_EPIOSDE=100
@@ -34,7 +34,7 @@ GAMMA = 0.9
 # reward discount
 MemoryCapacity=20000
 Batch=128
-Switch=0
+Switch=1
 tau = 0.0005
 '''DDPG第一步 设计A-C框架的Actor（DDPG算法，只有critic的部分才会用到记忆库）'''
 '''第一步 设计A-C框架形式的网络部分'''
@@ -266,7 +266,7 @@ def run(env):
                     all_ep_r[k].append(all_ep_r[k][-1] * 0.9 + reward_totle * 0.1)
                 if episode % 50 == 0 and episode > 200:#保存神经网络参数
                     save_data = {'net': actor.actor_estimate_eval.state_dict(), 'opt': actor.optimizer.state_dict()}
-                    torch.save(save_data, "E:\path planning\Path_DDPG_actor1.pth")
+                    torch.save(save_data, "Single UAV path planning/path planning/Path_DDPG_actor1.pth")
             # plt.plot(np.arange(len(all_ep_r)), all_ep_r)
             # plt.xlabel('Episode')
             # plt.ylabel('Moving averaged episode reward')
@@ -328,7 +328,7 @@ def run(env):
     else:
         print('DDPG测试中...')
         aa=Actor()
-        checkpoint_aa = torch.load("E:\path planning\Path_DDPG_actor.pth")
+        checkpoint_aa = torch.load("Single UAV path planning/path planning/Path_DDPG_actor.pth")
         aa.actor_estimate_eval.load_state_dict(checkpoint_aa['net'])
         win_times = 0
         average_timestep=0

@@ -32,9 +32,9 @@ class RlGame(gym.Env):
 
             pygame.display.set_caption("基于深度强化学习的空战场景无人机路径规划软件")
 
-            self.GRAPHICS = tools.load_graphics('E:\path planning/assignment\source\image')
+            self.GRAPHICS = tools.load_graphics('Single UAV path planning/path planning/assignment/source/image')
 
-            self.SOUND = tools.load_sound('E:\path planning/assignment\source\music')
+            self.SOUND = tools.load_sound('Single UAV path planning/path planning/assignment/source/music')
             self.clock = pygame.time.Clock()
             self.mouse_pos=(100,100)
             pygame.time.set_timer(C.CREATE_ENEMY_EVENT, C.ENEMY_MAKE_TIME)
@@ -299,7 +299,7 @@ class RlGame(gym.Env):
         # pygame.draw.circle(surface, C.BLACK, (self.obstacle0.init_x, self.obstacle0.init_y), 20, 1)
         # 画轨迹
         for i in range(1, len(self.trajectory_x)):
-            pygame.draw.line(surface, C.BLUE, (self.trajectory_x[i - 1], self.trajectory_y[i - 1]), (self.trajectory_x[i], self.trajectory_y[i]))
+            pygame.draw.line(surface, C.BLUE, (float(self.trajectory_x[i - 1]), float(self.trajectory_y[i - 1])), (float(self.trajectory_x[i]), float(self.trajectory_y[i])))
         for j in range(self.enemy_num):
             for i in range(1, len(self.trajectory_x)):
                 pygame.draw.line(surface, C.RED, (self.enemy_trajectory_x[j][i - 1], self.enemy_trajectory_y[j][i - 1]),

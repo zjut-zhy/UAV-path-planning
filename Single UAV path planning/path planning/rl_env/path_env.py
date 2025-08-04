@@ -260,11 +260,13 @@ class RlGame(gym.Env):
                               self.hero['hero' + str(i)].speed / 20, self.hero['hero' + str(i)].theta * 57.3 / 360,
                               self.goal0.init_x / 1000, self.goal0.init_y / 1000, o_flag]
             # print('自己_{}状态：'.format(i),self.hero['hero'+str(i)].posx,self.hero['hero'+str(i)].posy)
-            self.trajectory_x.append(self.hero['hero' + str(i)].posx)
-            self.trajectory_y.append(self.hero['hero' + str(i)].posy)
+            if self.Render:
+                self.trajectory_x.append(self.hero['hero' + str(i)].posx)
+                self.trajectory_y.append(self.hero['hero' + str(i)].posy)
         for i in range(self.enemy_num):
-            self.enemy_trajectory_x[i].append(self.enemy['enemy' + str(i)].posx)
-            self.enemy_trajectory_y[i].append(self.enemy['enemy' + str(i)].posy)
+            if self.Render:
+                self.enemy_trajectory_x[i].append(self.enemy['enemy' + str(i)].posx)
+                self.enemy_trajectory_y[i].append(self.enemy['enemy' + str(i)].posy)
         # 自己更新位置
         self.hero_group.update(action,self.Render)
         self.enemy_group.update([random.uniform(-0.5,1), random.uniform(-0.5,1)],self.Render)
@@ -318,4 +320,5 @@ class RlGame(gym.Env):
     def close(self):
         pygame.display.quit()
         quit()
+
 

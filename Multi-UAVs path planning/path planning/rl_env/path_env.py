@@ -269,8 +269,9 @@ class RlGame(gym.Env):
                                       self.hero['hero' + str(i)].theta * 57.3 / 360,
                                       self.goal0.init_x / 1000, self.goal0.init_y / 1000, o_flag]
                 self.hero['hero' + str(i)].update(action[i], self.Render)
-                self.trajectory_x.append(self.hero['hero' + str(i)].posx)
-                self.trajectory_y.append(self.hero['hero' + str(i)].posy)
+                if self.Render:
+                    self.trajectory_x.append(self.hero['hero' + str(i)].posx)
+                    self.trajectory_y.append(self.hero['hero' + str(i)].posy)
             else:
                 dis_2_obs = math.hypot(self.enemy['enemy' + str(i-1)].posx - self.obstacle0.init_x,
                                           self.enemy['enemy' + str(i-1)].posy - self.obstacle0.init_y)
@@ -301,8 +302,9 @@ class RlGame(gym.Env):
                                       self.enemy['enemy' + str(i-1)].theta * 57.3 / 360,
                                       self.hero0.posx / 1000, self.hero0.posy / 1000,self.hero0.speed / 30 ]
                 self.enemy['enemy' + str(i-1)].update(action[i], self.Render)
-                self.enemy_trajectory_x[i-1].append(self.enemy['enemy' + str(i-1)].posx)
-                self.enemy_trajectory_y[i-1].append(self.enemy['enemy' + str(i-1)].posy)
+                if self.Render:
+                    self.enemy_trajectory_x[i-1].append(self.enemy['enemy' + str(i-1)].posx)
+                    self.enemy_trajectory_y[i-1].append(self.enemy['enemy' + str(i-1)].posy)
                 # print(self.hero_state[i])
             # init_to_goal=math.atan2((-150+self.hero['hero'+str(i)].init_y),(200-self.hero['hero'+str(i)].init_x))
             # uav_to_goal = math.atan2((-self.goal0.init_y + self.hero['hero' + str(i)].posy), (self.goal0.init_x - self.hero['hero' + str(i)].posx))
